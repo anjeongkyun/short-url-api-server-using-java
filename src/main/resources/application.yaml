@@ -17,7 +17,7 @@ spring:
     password: 1234
     jpa:
       hibernate:
-        ddl-auto: validate #create update none
+        ddl-auto: create  #create update validate none
         show-sql: true
         naming:
           physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
