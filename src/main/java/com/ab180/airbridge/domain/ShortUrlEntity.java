@@ -10,15 +10,15 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name="tb_short_url")
-public class ShortUrlEntity {
+public class ShortUrlEntity extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "url_id")
     private long urlId;
 
-    @Column(name = "short_url")
-    private String shortUrl;
+    @Column(name = "short_id")
+    private String shortId;
 
     @Column(name = "origin_url")
     private String originUrl;

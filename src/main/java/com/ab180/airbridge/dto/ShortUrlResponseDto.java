@@ -2,6 +2,8 @@ package com.ab180.airbridge.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -9,9 +11,13 @@ import lombok.*;
 public class ShortUrlResponseDto {
     private ReponseData data;
 
-    public class ReponseData{
+    @Builder
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
+    public static class ReponseData{
         private String shortId;
         private String url;
-        private String createdAt;
+        private LocalDateTime createdAt;
     }
 }
