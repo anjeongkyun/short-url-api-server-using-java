@@ -63,11 +63,8 @@ public class ShortUrlControllerTest {
     public void ShortUrl_조회_GET_테스트() throws Exception {
 
         String urlStr =  "https://airbridge.io";
-        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
-        multiValueMap.add("short_id", "aVX");
 
-
-        mockMvc.perform(get("/short-links/aVX")
+        mockMvc.perform(get("/short-links/Spk")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isFound())
                 .andExpect(handler().handlerType(ShortUrlController.class))
