@@ -1,6 +1,8 @@
 package com.ab180.airbridge.controller;
 
+import com.ab180.airbridge.domain.ShortUrlEntity;
 import com.ab180.airbridge.dto.ShortUrlRequestDto;
+import com.ab180.airbridge.repository.ShortUrlRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,8 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -31,6 +32,8 @@ public class ShortUrlControllerTest {
 
     @Autowired
     private WebApplicationContext wac;
+    @Autowired
+    private ShortUrlRepository shortUrlRepository;
 
     @Before
     public void setUp() {
@@ -39,7 +42,7 @@ public class ShortUrlControllerTest {
 
     @Test
     public void ShortUrl_생성_POST_테스트() throws Exception {
-        //given
+
         ShortUrlRequestDto shortUrlRequestDto =
                 ShortUrlRequestDto
                         .builder()
@@ -47,7 +50,6 @@ public class ShortUrlControllerTest {
                         .build();
 
         String json = new ObjectMapper().writeValueAsString(shortUrlRequestDto);
-        System.out.println(json);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("http://localhost:8080/short-links")
@@ -62,9 +64,13 @@ public class ShortUrlControllerTest {
     @Test
     public void ShortUrl_조회_GET_테스트() throws Exception {
 
-        String urlStr =  "https://airbridge.io";
+        ShortUrlEntity shortUrlEntity =
+                shortUrlRepository.findTop1ByOrderByCreatedAtDesc();
 
-        mockMvc.perform(get("/short-links/Spk")
+        if(ObjectUtils.isEmpty(shortUrlEntity)) return;
+
+        String short_id = shortUrlEntity.getShortId();
+        mockMvc.perform(get("/short-links/" + short_id)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isFound())
                 .andExpect(handler().handlerType(ShortUrlController.class))
