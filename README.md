@@ -4,8 +4,8 @@ Backend Engineer - Data Serving API Coding Test
 ## 목차
 * **[개발 환경](#개발-환경)**
 * **[실행 결과](#실행-결과)**
-  * [[POST] ShortLink 생성 API](#POST-ShortLink-생성-API)
-  * [[GET] ShortLink 조회 API](#GET-ShortLink-조회-API)
+  * [[POST] ShortLink 생성 API](#ShortLink-생성-API)
+  * [[GET] ShortLink 조회 API](#ShortLink-조회-API)
 * **[예외 처리](#예외-처리)**
   * [요청 URL 값이 비어있을 경우](#요청-URL-값이-비어있을-경우)
   * [요청 URL 형식이 잘못되었을 경우](#요청-URL-형식이-잘못되었을-경우)
