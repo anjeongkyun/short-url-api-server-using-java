@@ -6,7 +6,6 @@ import com.ab180.airbridge.dto.ShortUrlResponseDto;
 import com.ab180.airbridge.repository.ShortUrlRepository;
 import com.ab180.airbridge.utils.UrlEncoderUtils;
 import com.ab180.airbridge.exception.CustomException;
-import com.ab180.airbridge.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

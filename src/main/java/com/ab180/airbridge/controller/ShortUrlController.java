@@ -21,9 +21,8 @@ public class ShortUrlController {
 
     @PostMapping
     private ResponseEntity<?> convertShortLink(
-            @RequestBody ShortUrlRequestDto shortUrlRequestDto,
-            Errors errors
-    ) {
+            @RequestBody ShortUrlRequestDto shortUrlRequestDto) {
+
         String url = shortUrlRequestDto.getUrl();
 
         if(ObjectUtils.isEmpty(url))
@@ -39,8 +38,7 @@ public class ShortUrlController {
 
     @GetMapping("/{short_id}")
     private ResponseEntity<?> getShortLink(
-            @PathVariable String short_id
-    ) {
+            @PathVariable String short_id) {
 
         if(ObjectUtils.isEmpty(short_id))
             throw new CustomException(SHORT_ID_NOT_VALUE);

@@ -2,8 +2,6 @@ package com.ab180.airbridge.utils;
 
 import org.springframework.stereotype.Component;
 
-import java.security.NoSuchAlgorithmException;
-
 @Component
 public class UrlEncoderUtils {
     private final int BASE62 = 62;
@@ -21,6 +19,7 @@ public class UrlEncoderUtils {
     public String urlEncoder(long shortId){
         long encodeVal = generateEncodeVal(shortId);
         String encodeStr = encoding(encodeVal);
+
         return encodeStr;
     }
 
