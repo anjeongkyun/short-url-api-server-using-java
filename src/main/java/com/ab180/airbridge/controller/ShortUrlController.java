@@ -1,15 +1,16 @@
 package com.ab180.airbridge.controller;
 
 import com.ab180.airbridge.dto.ShortUrlRequestDto;
+import com.ab180.airbridge.exception.CustomException;
 import com.ab180.airbridge.service.IShortUrlService;
+import com.ab180.airbridge.utils.CommonUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.Objects;
+import static com.ab180.airbridge.exception.ErrorCode.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/short-links")
@@ -20,14 +21,17 @@ public class ShortUrlController {
 
     @PostMapping
     private ResponseEntity<?> convertShortLink(
-            @RequestBody @Valid ShortUrlRequestDto shortUrlRequestDto,
+            @RequestBody ShortUrlRequestDto shortUrlRequestDto,
             Errors errors
     ) {
+        String url = shortUrlRequestDto.getUrl();
 
-        if(errors.hasErrors()) {
-            String errMsg = Objects.requireNonNull(errors.getFieldError()).getDefaultMessage();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errMsg);
-        }
+        if(ObjectUtils.isEmpty(url))
+            throw new CustomException(URL_IFNO_NOT_VALUE);
+
+        if(!CommonUtils.urlValidationCheck(url))
+            throw new CustomException(URL_INFO_WRONG_FORMAT);
+
 
         return iShortLinkService.convertShortUrl(shortUrlRequestDto);
 
@@ -37,6 +41,9 @@ public class ShortUrlController {
     private ResponseEntity<?> getShortLink(
             @PathVariable String short_id
     ) {
+
+        if(ObjectUtils.isEmpty(short_id))
+            throw new CustomException(SHORT_ID_NOT_VALUE);
 
         return iShortLinkService.urlRedirect(short_id);
     }

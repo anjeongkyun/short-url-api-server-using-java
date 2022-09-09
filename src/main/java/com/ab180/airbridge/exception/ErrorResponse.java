@@ -1,4 +1,4 @@
-package exception;
+package com.ab180.airbridge.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -5,14 +5,16 @@ import com.ab180.airbridge.dto.ShortUrlRequestDto;
 import com.ab180.airbridge.dto.ShortUrlResponseDto;
 import com.ab180.airbridge.repository.ShortUrlRepository;
 import com.ab180.airbridge.utils.UrlEncoderUtils;
-import exception.CustomException;
-import exception.ErrorCode;
+import com.ab180.airbridge.exception.CustomException;
+import com.ab180.airbridge.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import javax.transaction.Transactional;
+
+import static com.ab180.airbridge.exception.ErrorCode.SHORT_LINK_NOT_FOUND;
 
 @AllArgsConstructor
 @Service
@@ -63,7 +65,7 @@ public class ShortUrlService implements IShortUrlService {
         ShortUrlEntity shortUrlEntity = shortUrlRepository.findByShortId(shortId);
 
         if(ObjectUtils.isEmpty(shortUrlEntity))
-            throw new CustomException(ErrorCode.URL_INFO_NOT_FOUND);
+            throw new CustomException(SHORT_LINK_NOT_FOUND);
 
         ShortUrlResponseDto shortUrlResponseDto = shortUrlEntityToDto(shortUrlEntity);
 
