@@ -11,4 +11,5 @@ public interface ShortUrlRepository extends JpaRepository<ShortUrlEntity, Long> 
     ShortUrlEntity findTop1ByOrderByCreatedAtDesc();
     ShortUrlEntity findByOriginUrl(String OriginUrl);
     ShortUrlEntity findByShortId(String shortId);
+    void deleteAllByUrlId(long urlId);
 }

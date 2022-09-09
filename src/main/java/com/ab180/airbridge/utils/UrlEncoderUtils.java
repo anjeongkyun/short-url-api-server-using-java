@@ -27,9 +27,9 @@ public class UrlEncoderUtils {
     private long generateEncodeVal(long shortId){
         String shortIdToStr = String.valueOf(shortId);
         if(shortIdToStr.length() == 1){
-            shortId = shortId * 1000;
+            shortId = shortId * 10000;
         }else if(shortIdToStr.length() == 2) {
-            shortId = shortId * 100;
+            shortId = shortId * 1000;
         }
 
         return shortId;

@@ -5,15 +5,14 @@ import com.ab180.airbridge.dto.ShortUrlRequestDto;
 import com.ab180.airbridge.dto.ShortUrlResponseDto;
 import com.ab180.airbridge.repository.ShortUrlRepository;
 import com.ab180.airbridge.utils.UrlEncoderUtils;
+import exception.CustomException;
+import exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
 import javax.transaction.Transactional;
-
-import static com.ab180.airbridge.utils.CommonUtils.generateRandomValue;
 
 @AllArgsConstructor
 @Service
@@ -30,6 +29,16 @@ public class ShortUrlService implements IShortUrlService {
 
         if(ObjectUtils.isEmpty(shortUrlEntity)){
             ShortUrlEntity shortUrl = shortUrlRepository.findTop1ByOrderByCreatedAtDesc();
+            if(shortUrl == null){
+                shortUrl = ShortUrlEntity
+                        .builder()
+                        .originUrl(url)
+                        .build();
+
+                shortUrl = shortUrlRepository.save(shortUrl);
+                shortUrlRepository.deleteAllByUrlId(shortUrl.getUrlId());
+            }
+
             encodeUrl = urlEncoderUtils.urlEncoder(shortUrl.getUrlId());
 
             shortUrl = ShortUrlEntity
@@ -50,10 +59,16 @@ public class ShortUrlService implements IShortUrlService {
 
     @Override
     public ResponseEntity<?> urlRedirect(String shortId) {
+
         ShortUrlEntity shortUrlEntity = shortUrlRepository.findByShortId(shortId);
+
+        if(ObjectUtils.isEmpty(shortUrlEntity))
+            throw new CustomException(ErrorCode.URL_INFO_NOT_FOUND);
+
         ShortUrlResponseDto shortUrlResponseDto = shortUrlEntityToDto(shortUrlEntity);
 
         return ResponseEntity.status(HttpStatus.FOUND).body(shortUrlResponseDto);
+
     }
 
     private ShortUrlResponseDto shortUrlEntityToDto(ShortUrlEntity shortUrlEntity){
