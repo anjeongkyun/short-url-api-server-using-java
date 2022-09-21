@@ -1,9 +1,10 @@
-package com.ab180.airbridge.service;
+package com.ab180.airbridge.service.impl;
 
 import com.ab180.airbridge.domain.ShortUrlEntity;
 import com.ab180.airbridge.dto.ShortUrlRequestDto;
 import com.ab180.airbridge.dto.ShortUrlResponseDto;
 import com.ab180.airbridge.repository.ShortUrlRepository;
+import com.ab180.airbridge.service.IShortUrlService;
 import com.ab180.airbridge.utils.UrlEncoderUtils;
 import com.ab180.airbridge.exception.CustomException;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ import static com.ab180.airbridge.exception.ErrorCode.SHORT_LINK_NOT_FOUND;
 
 @AllArgsConstructor
 @Service
-public class ShortUrlService implements IShortUrlService {
+public class ShortUrlServiceImpl implements IShortUrlService {
     private final UrlEncoderUtils urlEncoderUtils;
     private final ShortUrlRepository shortUrlRepository;
 
