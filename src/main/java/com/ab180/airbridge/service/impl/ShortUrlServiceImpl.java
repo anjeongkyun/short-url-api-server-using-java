@@ -1,5 +1,6 @@
 package com.ab180.airbridge.service.impl;
 
+import com.ab180.airbridge.dao.ShortUrlDao;
 import com.ab180.airbridge.domain.ShortUrlEntity;
 import com.ab180.airbridge.dto.ShortUrlRequestDto;
 import com.ab180.airbridge.dto.ShortUrlResponseDto;
@@ -20,25 +21,26 @@ import static com.ab180.airbridge.exception.ErrorCode.SHORT_LINK_NOT_FOUND;
 @Service
 public class ShortUrlServiceImpl implements IShortUrlService {
     private final UrlEncoderUtils urlEncoderUtils;
-    private final ShortUrlRepository shortUrlRepository;
+    private final ShortUrlDao shortUrlDao;
 
     @Transactional
     @Override
     public ResponseEntity<?> convertShortUrl(ShortUrlRequestDto shortUrlRequestDto){
         String encodeUrl;
         String url = shortUrlRequestDto.getUrl();
-        ShortUrlEntity shortUrlEntity = shortUrlRepository.findByOriginUrl(url);
+        ShortUrlEntity shortUrlEntity = shortUrlDao.findByOriginUrl(url);
 
         if(ObjectUtils.isEmpty(shortUrlEntity)){
-            ShortUrlEntity shortUrl = shortUrlRepository.findTop1ByOrderByCreatedAtDesc();
+            ShortUrlEntity shortUrl = shortUrlDao.findTop1ByOrderByCreatedAtDesc();
+
             if(shortUrl == null){
                 shortUrl = ShortUrlEntity
                         .builder()
                         .originUrl(url)
                         .build();
 
-                shortUrl = shortUrlRepository.save(shortUrl);
-                shortUrlRepository.deleteAllByUrlId(shortUrl.getUrlId());
+                shortUrl = shortUrlDao.shortUrlSave(shortUrl);
+                shortUrlDao.deleteAllByUrlId(shortUrl.getUrlId());
             }
 
             encodeUrl = urlEncoderUtils.urlEncoder(shortUrl.getUrlId());
@@ -49,7 +51,7 @@ public class ShortUrlServiceImpl implements IShortUrlService {
                     .originUrl(url)
                     .build();
 
-            shortUrl = shortUrlRepository.save(shortUrl);
+            shortUrl = shortUrlDao.shortUrlSave(shortUrl);
             ShortUrlResponseDto shortUrlResponseDto = shortUrlEntityToDto(shortUrl);
             return ResponseEntity.ok(shortUrlResponseDto);
         }else{
@@ -62,8 +64,7 @@ public class ShortUrlServiceImpl implements IShortUrlService {
     @Override
     public ResponseEntity<?> urlRedirect(String shortId) {
 
-        ShortUrlEntity shortUrlEntity = shortUrlRepository.findByShortId(shortId);
-
+        ShortUrlEntity shortUrlEntity = shortUrlDao.findByShortId(shortId);
         if(ObjectUtils.isEmpty(shortUrlEntity))
             throw new CustomException(SHORT_LINK_NOT_FOUND);
 
