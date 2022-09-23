@@ -1,5 +1,4 @@
 # 220908-anjeongkyun
-Backend Engineer - Data Serving API Coding Test
 
 ## 목차
 * **[개발 환경](#개발-환경)**
